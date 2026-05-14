@@ -1,0 +1,119 @@
+/* Rankigi Watcher styles. IBM Plex Mono, amber accent #f59e0b, zero border-radius. */
+
+.rankigi-watcher-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--background-primary);
+  color: var(--text-normal);
+}
+
+.rankigi-watcher-header {
+  font-family: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--background-modifier-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-transform: uppercase;
+  flex: 0 0 auto;
+}
+
+.rankigi-watcher-header-title {
+  color: var(--text-normal);
+}
+
+.rankigi-watcher-header-hash {
+  color: var(--text-muted);
+  cursor: pointer;
+  user-select: none;
+}
+
+.rankigi-watcher-header-hash:hover {
+  color: #f59e0b;
+}
+
+.rankigi-watcher-feed {
+  font-family: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  overflow-y: auto;
+  flex: 1 1 auto;
+}
+
+.rankigi-watcher-feed-empty {
+  padding: 16px 12px;
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.rankigi-watcher-row {
+  display: grid;
+  grid-template-columns: 96px 80px 140px 1fr 20px;
+  gap: 8px;
+  padding: 4px 12px;
+  border-bottom: 1px solid var(--background-modifier-border);
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.rankigi-watcher-row:hover {
+  background: var(--background-modifier-hover);
+}
+
+.rankigi-watcher-row-cell {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rankigi-watcher-row.severity-warn,
+.rankigi-watcher-row.severity-critical,
+.rankigi-watcher-row.alert {
+  color: #f59e0b;
+}
+
+.rankigi-watcher-row-expanded {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 10px;
+  padding: 6px 12px 8px 12px;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--background-modifier-border);
+  word-break: break-all;
+}
+
+.rankigi-watcher-stub {
+  padding: 12px;
+  color: var(--text-muted);
+  font-size: 11px;
+  border-top: 1px solid var(--background-modifier-border);
+}
+
+.rankigi-status-clean { color: inherit; }
+.rankigi-status-active { color: #f59e0b; }
+.rankigi-status-alert { color: #f59e0b; font-weight: 600; }
+
+.rankigi-settings-chain-info {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 12px;
+  background: var(--background-secondary);
+  padding: 8px 10px;
+  border: 1px solid var(--background-modifier-border);
+  margin: 8px 0;
+  word-break: break-all;
+}
+
+.rankigi-settings-chain-info-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 2px 0;
+}
+
+.rankigi-settings-chain-info-label {
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 10px;
+}

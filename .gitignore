@@ -1,0 +1,10 @@
+node_modules/
+main.js
+*.log
+.DS_Store
+data.json
+chain.jsonl
+chain-export-*.jsonl
+.vscode/
+dist/
+coverage/
