@@ -12,6 +12,19 @@ Every plugin action is hashed and chained locally. Nothing leaves your machine u
 - Clipboard access, opt-in (Phase 4)
 - Shell and filesystem escapes (Phase 4)
 
+## Works with AI plugins
+
+If you have Claude, Copilot, or any AI plugin installed in Obsidian, Watcher monitors them too.
+
+Every API call an AI plugin makes is hashed into the chain. You get a tamper-evident record of:
+
+- which AI plugin called which endpoint
+- when it called it
+- how often
+- whether the domain was declared in the plugin manifest or flagged as unknown
+
+your vault. your AI. your proof.
+
 ## Install
 
 ### Recommended: BRAT (one-click beta install)
