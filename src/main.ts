@@ -8,6 +8,8 @@ import {
 } from "./settings";
 import { WatcherChain } from "./chain/chain";
 import { LifecycleMonitor } from "./monitors/lifecycle";
+import { NetworkMonitor } from "./monitors/network";
+import { VaultWritesMonitor } from "./monitors/vault";
 import { WatcherStatusBar } from "./ui/statusBar";
 import { WatcherSidebarView, VIEW_TYPE_WATCHER } from "./ui/sidebarView";
 import { generateAgentId, generateInstallId } from "./util/id";
@@ -23,6 +25,8 @@ export default class RankigiWatcherPlugin extends Plugin {
   settings!: RankigiWatcherSettings;
   chain!: WatcherChain;
   private lifecycleMonitor: LifecycleMonitor | null = null;
+  private networkMonitor: NetworkMonitor | null = null;
+  private vaultWritesMonitor: VaultWritesMonitor | null = null;
   private statusBar: WatcherStatusBar | null = null;
   private statusBarTimer: number | null = null;
   private pluginDir: string = "";
@@ -61,9 +65,24 @@ export default class RankigiWatcherPlugin extends Plugin {
     this.lifecycleMonitor.onChange(() => {
       this.refreshSidebar();
       this.refreshStatusBar();
+      if (this.networkMonitor) this.networkMonitor.refreshAllowlist();
     });
     if (this.settings.monitorLifecycle) {
       this.lifecycleMonitor.start();
+    }
+
+    this.networkMonitor = new NetworkMonitor(this.app, this.chain, this.settings);
+    if (this.settings.monitorNetwork) {
+      this.networkMonitor.start();
+    }
+
+    this.vaultWritesMonitor = new VaultWritesMonitor(
+      this.app,
+      this.chain,
+      this.settings
+    );
+    if (this.settings.monitorVaultWrites) {
+      this.vaultWritesMonitor.start();
     }
 
     this.addSettingTab(new RankigiSettingTab(this.app, this));
@@ -73,28 +92,45 @@ export default class RankigiWatcherPlugin extends Plugin {
     }, STATUS_BAR_REFRESH_MS);
     this.registerInterval(this.statusBarTimer);
 
-    // Genesis row, only on a fresh chain.
-    if (this.chain.getHead().event_count === 0) {
-      await this.chain.append({
-        category: "LIFECYCLE",
-        plugin_id: "rankigi-watcher",
-        summary: "watcher started",
-        payload: {
-          event: "watcher_start",
-          agent_id: this.settings.agentId,
-          version: this.manifest.version,
+    // Startup event, every load. Records interception coverage so the chain
+    // is self-describing.
+    await this.chain.append({
+      category: "LIFECYCLE",
+      plugin_id: "rankigi-watcher",
+      summary: "watcher started v" + this.manifest.version,
+      payload: {
+        event: "watcher_start",
+        agent_id: this.settings.agentId,
+        version: this.manifest.version,
+        interception: {
+          fetch: this.settings.monitorNetwork ? "patched" : "disabled",
+          xhr: this.settings.monitorNetwork ? "patched" : "disabled",
+          requestUrl: this.settings.monitorNetwork
+            ? "patched_live_binding_only"
+            : "disabled",
+          vault_writes: this.settings.monitorVaultWrites
+            ? "adapter_layer"
+            : "disabled",
         },
-        severity: "info",
-      });
-      this.refreshSidebar();
-      this.refreshStatusBar();
-    }
+      },
+      severity: "info",
+    });
+    this.refreshSidebar();
+    this.refreshStatusBar();
   }
 
   async onunload(): Promise<void> {
     if (this.lifecycleMonitor) {
       this.lifecycleMonitor.stop();
       this.lifecycleMonitor = null;
+    }
+    if (this.networkMonitor) {
+      this.networkMonitor.stop();
+      this.networkMonitor = null;
+    }
+    if (this.vaultWritesMonitor) {
+      this.vaultWritesMonitor.stop();
+      this.vaultWritesMonitor = null;
     }
     if (this.statusBarTimer !== null) {
       window.clearInterval(this.statusBarTimer);
@@ -113,11 +149,26 @@ export default class RankigiWatcherPlugin extends Plugin {
   }
 
   applyMonitorSettings(): void {
-    if (!this.lifecycleMonitor) return;
-    if (this.settings.monitorLifecycle) {
-      this.lifecycleMonitor.start();
-    } else {
-      this.lifecycleMonitor.stop();
+    if (this.lifecycleMonitor) {
+      if (this.settings.monitorLifecycle) {
+        this.lifecycleMonitor.start();
+      } else {
+        this.lifecycleMonitor.stop();
+      }
+    }
+    if (this.networkMonitor) {
+      if (this.settings.monitorNetwork) {
+        this.networkMonitor.start();
+      } else {
+        this.networkMonitor.stop();
+      }
+    }
+    if (this.vaultWritesMonitor) {
+      if (this.settings.monitorVaultWrites) {
+        this.vaultWritesMonitor.start();
+      } else {
+        this.vaultWritesMonitor.stop();
+      }
     }
   }
 

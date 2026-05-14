@@ -91,27 +91,27 @@ export class RankigiSettingTab extends PluginSettingTab {
 
     new Setting(containerEl)
       .setName("Network Activity")
-      .setDesc("Record plugin network requests. Available in v0.2.0.")
+      .setDesc("Record plugin network requests via fetch, XHR, and requestUrl.")
       .addToggle((t) =>
         t
           .setValue(this.plugin.settings.monitorNetwork)
-          .setDisabled(true)
           .onChange(async (v) => {
             this.plugin.settings.monitorNetwork = v;
             await this.plugin.saveSettings();
+            this.plugin.applyMonitorSettings();
           })
       );
 
     new Setting(containerEl)
       .setName("Vault Writes")
-      .setDesc("Record vault file creates, modifies, deletes, renames. Available in v0.2.0.")
+      .setDesc("Record vault file creates, modifies, deletes, renames.")
       .addToggle((t) =>
         t
           .setValue(this.plugin.settings.monitorVaultWrites)
-          .setDisabled(true)
           .onChange(async (v) => {
             this.plugin.settings.monitorVaultWrites = v;
             await this.plugin.saveSettings();
+            this.plugin.applyMonitorSettings();
           })
       );
 

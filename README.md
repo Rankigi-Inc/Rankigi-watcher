@@ -30,6 +30,14 @@ Every plugin action is hashed and chained locally. Nothing leaves your machine u
 3. Copy the three files into that folder
 4. Enable in Settings > Community Plugins
 
+## Known limitations
+
+Network monitoring does not capture requests made by plugins that imported requestUrl via destructuring at load time. There is no runtime signal to detect which of your installed plugins fall into this category. fetch and XMLHttpRequest calls are fully captured regardless.
+
+Vault write attribution identifies the writing plugin when it is on the synchronous call stack at write time. Writes from async or timer-deferred plugin code record plugin_id as null. The chain event includes an attribution_method field so you can distinguish attributed from unattributed entries.
+
+Writes to .obsidian/ (plugin data files, workspace config, app settings) are not recorded. The Obsidian vault API does not expose these writes to plugins.
+
 ## Connect to RANKIGI (optional, Phase 3)
 
 Get a free account at rankigi.com. Paste your API key in Settings, Rankigi Watcher, RANKIGI Cloud.
