@@ -1,7 +1,7 @@
 {
   "id": "rankigi-watcher",
   "name": "Rankigi Watcher",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "minAppVersion": "1.5.0",
   "description": "Tamper-evident audit chain for installed Obsidian plugins. Local-first, optional RANKIGI cloud.",
   "author": "Rankigi Inc",
