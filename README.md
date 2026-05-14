@@ -14,12 +14,21 @@ Every plugin action is hashed and chained locally. Nothing leaves your machine u
 
 ## Install
 
-Not yet in the community plugin directory.
+### Recommended: BRAT (one-click beta install)
 
-Manual install:
-1. Download main.js, manifest.json, styles.css
-2. Copy to .obsidian/plugins/rankigi-watcher/
-3. Enable in Settings, Community Plugins
+1. Install BRAT from the Obsidian community plugins directory (search "BRAT")
+2. Open BRAT settings
+3. Click "Add Beta Plugin"
+4. Paste: Rankigi-Inc/Rankigi-watcher
+5. Click Add Plugin
+6. Enable Rankigi Watcher in Settings > Community Plugins
+
+### Manual install
+
+1. Download main.js, manifest.json, styles.css from the latest release: github.com/Rankigi-Inc/Rankigi-watcher/releases
+2. Create folder: {your-vault}/.obsidian/plugins/rankigi-watcher/
+3. Copy the three files into that folder
+4. Enable in Settings > Community Plugins
 
 ## Connect to RANKIGI (optional, Phase 3)
 
